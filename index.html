@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- navigation -->
+    <nav class="navbar">
+        <div class="logo">COSMIC EXPLORER</div>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#explore">Explore</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+    <!-- homescreen -->
+    <header id="home" class="hero">
+        <p class="subtitle">EXPLORE THE UNIVERSE</p>
+        <h1>Beyond the <br> universe known to mankind</h1>
+        <p class="description">
+            Discover new worlds, and distant planets
+            and uncover the secrets of the cosmos
+        </p>
+        <a href="#explore" class="explore-button">-Begin Exploration-</a>
+    </header>
+
+    <!-- planets -->
+    <main id="explore" class="exploration">
+        <div class="section-heading">
+            <p class="subtitle">Discover new worlds</p>
+            <h2>Explore planets</h2>
+            <p>Select a planet</p>
+        </div>
+
+        <div class="planet-container">
+            <button class="planet-card" data-planet="aurelia">
+                <div class="planet-orb aurelia"></div>
+                <h3>Aurelia</h3>
+                <p>The golden world</p>
+            </button>
+
+            <button class="planet-card" data-planet="nyx">
+                <div class="planet-orb nyx"></div>
+                <h3>Nyx</h3>
+                <p>Planet of eternal night</p>
+            </button>
+
+            <button class="planet-card" data-planet="zephyria">
+                <div class="planet-orb zephyria"></div>
+                <h3>Zephyria</h3>
+                <p>The storm giant</p>
+            </button>
+
+            <button class="planet-card" data-planet="cryon">
+                <div class="planet-orb cryon"></div>
+                <h3>Cryon</h3>
+                <p>The frozen frontier</p>
+            </button>
+        </div>
+    </main>
+
+    <!-- popup -->
+    <div id="planet-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close-button">x</button>
+            <p class="subtitle">Planet Database</p>
+            <h2 id="planet-name">Planet Name</h2>
+            <p id="planet-description">Planet description appears here.</p>
+            <div id="planet-stats"></div>
+        </div>
+    </div>
+
+    <!--bottom/footer -->
+    <footer id="footer">
+        <p>COSMIC EXPLORER &copy; 2026</p>
+        <p>An interactive journey through the unknown</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
