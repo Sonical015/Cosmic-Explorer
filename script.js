@@ -1,66 +1,301 @@
-// info for each planet
-var planets = {
-    aurelia: {
-        name: "Aurelia",
-        description: "A golden world with deserts of glittering sand and a sun that never fully sets.",
-        stats: ["Distance: 4.2 light years", "Temperature: 85°C", "Moons: 2"]
-    },
-    nyx: {
-        name: "Nyx",
-        description: "A dark planet that has never seen daylight. Strange lights glow across its surface.",
-        stats: ["Distance: 9.8 light years", "Temperature: -120°C", "Moons: 0"]
-    },
-    zephyria: {
-        name: "Zephyria",
-        description: "A gas giant covered in storms that are larger than whole planets.",
-        stats: ["Distance: 6.5 light years", "Temperature: 20°C", "Moons: 11"]
-    },
-    cryon: {
-        name: "Cryon",
-        description: "A frozen world of ice plains and glaciers at the edge of the known galaxy.",
-        stats: ["Distance: 12.1 light years", "Temperature: -200°C", "Moons: 1"]
-    }
+
+// small random helpers
+
+function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function pickRandom(list) {
+    return list[Math.floor(Math.random() * list.length)];
+}
+
+function makeName() {
+    let parts = ["Aru", "Zel", "Nex", "Vora", "Kry", "Eli", "Tha", "Or", "Lumi", "Xa"];
+    let endings = ["on", "ia", "us", "ara", "ex", "ora", "ium"];
+
+    return pickRandom(parts) + pickRandom(parts) + pickRandom(endings);
+}
+
+
+// star types
+
+const starTypes = [
+    { type: "Blue star", color: "#8dbdff", min: 10000, max: 30000, mass: 2.5, age: 2 },
+    { type: "White star", color: "#e6eaff", min: 7500, max: 10000, mass: 1.5, age: 4 },
+    { type: "Yellow star", color: "#ffe28a", min: 5200, max: 6000, mass: 1, age: 8 },
+    { type: "Orange star", color: "#ffad65", min: 3700, max: 5200, mass: 0.8, age: 10 },
+    { type: "Red dwarf", color: "#ff6868", min: 2400, max: 3700, mass: 0.4, age: 12 }
+];
+
+
+// planet types based on their distance from the star
+
+const planetTypes = {
+    inner: ["rocky", "volcanic", "desert"],
+    middle: ["rocky", "ocean", "temperate"],
+    outer: ["gas", "ice"]
 };
 
-var modal = document.getElementById("planet-modal");
-var cards = document.querySelectorAll(".planet-card");
-var closeBtn = document.getElementById("close-modal");
 
-// open the popup when a card is clicked
-for (var i = 0; i < cards.length; i++) {
-    cards[i].addEventListener("click", function () {
-        var key = this.getAttribute("data-planet");
-        var planet = planets[key];
+// generate one star
 
-        document.getElementById("planet-name").textContent = planet.name;
-        document.getElementById("planet-description").textContent = planet.description;
+function createStar() {
+    let star = pickRandom(starTypes);
 
-        var statsHtml = "";
-        for (var j = 0; j < planet.stats.length; j++) {
-            statsHtml += "<div>" + planet.stats[j] + "</div>";
-        }
-        document.getElementById("planet-stats").innerHTML = statsHtml;
+    return {
+        name: makeName(),
+        type: star.type,
+        color: star.color,
+        temperature: randomNumber(star.min, star.max),
+        mass: (star.mass + Math.random() * 0.5).toFixed(2),
+        age: randomNumber(1, star.age)
+    };
+}
 
-        modal.classList.remove("hidden");
+
+// generate a planet
+
+function createPlanet(position) {
+
+    let zone;
+
+    if (position < 0.35) {
+        zone = "inner";
+    } else if (position < 0.7) {
+        zone = "middle";
+    } else {
+        zone = "outer";
+    }
+
+    let type = pickRandom(planetTypes[zone]);
+
+    let gravity = randomNumber(3, 20) / 10;
+    let temperature;
+
+    if (zone === "inner") {
+        temperature = randomNumber(250, 700);
+    } else if (zone === "middle") {
+        temperature = randomNumber(180, 330);
+    } else {
+        temperature = randomNumber(30, 180);
+    }
+
+    let atmospheres = {
+        rocky: ["Thin carbon dioxide", "Nitrogen-rich", "Very thin atmosphere"],
+        volcanic: ["Sulphur-rich", "Carbon dioxide", "Toxic volcanic gases"],
+        desert: ["Dry nitrogen", "Carbon dioxide", "Thin dusty atmosphere"],
+        ocean: ["Nitrogen and oxygen", "Water vapour-rich"],
+        temperate: ["Nitrogen and oxygen", "Oxygen-rich"],
+        gas: ["Hydrogen and helium", "Hydrogen-rich"],
+        ice: ["Methane and nitrogen", "Thin nitrogen atmosphere"]
+    };
+
+    let water = "No known liquid water";
+    let life = "No signs of life detected";
+
+    if (type === "ocean") {
+        water = "Large liquid oceans";
+    } else if (type === "temperate") {
+        water = pickRandom(["Liquid water possible", "Large liquid oceans"]);
+        life = pickRandom(["Possible microbial life", "No signs of life detected"]);
+    } else if (type === "ice") {
+        water = "Frozen water deposits";
+    }
+
+    let planet = {
+        name: makeName(),
+        type: type,
+        gravity: gravity,
+        temperature: temperature,
+        atmosphere: pickRandom(atmospheres[type]),
+        moons: randomNumber(0, type === "gas" ? 20 : 4),
+        water: water,
+        life: life
+    };
+
+    planet.description = describePlanet(planet);
+
+    return planet;
+}
+
+
+// build a description from the planet's characteristics
+
+function describePlanet(planet) {
+
+    let text = "";
+
+    if (planet.type === "volcanic") {
+        text = "This is an extremely active volcanic world with a harsh surface.";
+    } else if (planet.type === "desert") {
+        text = "A dry and dusty planet with a mostly barren landscape.";
+    } else if (planet.type === "ocean") {
+        text = "A water-rich world covered by vast oceans.";
+    } else if (planet.type === "temperate") {
+        text = "A relatively mild world with conditions that may support life.";
+    } else if (planet.type === "gas") {
+        text = "A massive gas planet with no ordinary solid surface.";
+    } else if (planet.type === "ice") {
+        text = "A frozen world located in the colder regions of its solar system.";
+    } else {
+        text = "A rocky world with a solid surface and a relatively thin atmosphere.";
+    }
+
+    text += " Its surface temperature is around " + planet.temperature + " K.";
+    text += " It has " + planet.moons + " moon(s) and gravity of " + planet.gravity + " Earth g.";
+    text += " Its atmosphere is " + planet.atmosphere.toLowerCase() + ".";
+    text += " " + planet.water + ".";
+    text += " " + planet.life + ".";
+
+    return text;
+}
+
+
+// generate a complete solar system
+
+function createSolarSystem() {
+
+    let star = createStar();
+    let numberOfPlanets = randomNumber(3, 8);
+    let planets = [];
+
+    for (let i = 0; i < numberOfPlanets; i++) {
+
+        let position = (i + 1) / numberOfPlanets;
+
+        planets.push(createPlanet(position));
+    }
+
+    return {
+        name: star.name + " System",
+        star: star,
+        planets: planets
+    };
+}
+
+
+// generate the whole universe
+
+let currentUniverse = [];
+
+function generateUniverse() {
+
+    currentUniverse = [];
+
+    let numberOfSystems = randomNumber(3, 5);
+
+    for (let i = 0; i < numberOfSystems; i++) {
+        currentUniverse.push(createSolarSystem());
+    }
+
+    showUniverse();
+}
+
+
+// display all generated systems
+
+function showUniverse() {
+
+    let container = document.getElementById("systems-container");
+
+    container.innerHTML = "";
+
+    currentUniverse.forEach(function(system, systemIndex) {
+
+        let planetsHTML = "";
+
+        system.planets.forEach(function(planet, planetIndex) {
+
+            planetsHTML += `
+                <button class="generated-planet"
+                    data-system="${systemIndex}"
+                    data-planet="${planetIndex}">
+
+                    <div class="planet-orb ${planet.type}"></div>
+
+                    <h4>${planet.name}</h4>
+                    <p>${planet.type.toUpperCase()} WORLD</p>
+
+                </button>
+            `;
+        });
+
+        container.innerHTML += `
+            <div class="solar-system">
+
+                <div class="system-heading">
+
+                    <div class="star-orb"
+                        style="--star-color: ${system.star.color}">
+                    </div>
+
+                    <div>
+                        <h3>${system.name}</h3>
+                        <p>${system.star.type} · ${system.star.temperature} K</p>
+                        <p>Mass: ${system.star.mass} solar masses</p>
+                        <p>Age: ${system.star.age} billion years</p>
+                    </div>
+
+                </div>
+
+                <div class="system-planets">
+                    ${planetsHTML}
+                </div>
+
+            </div>
+        `;
     });
 }
 
-function closeModal() {
-    modal.classList.add("hidden");
-}
 
-closeBtn.addEventListener("click", closeModal);
+// open the planet information popup
 
-// clicking the dark background also closes it
-modal.addEventListener("click", function (e) {
-    if (e.target === modal) {
-        closeModal();
+document.getElementById("systems-container").addEventListener("click", function(event) {
+
+    let button = event.target.closest(".generated-planet");
+
+    if (!button) return;
+
+    let systemIndex = Number(button.dataset.system);
+    let planetIndex = Number(button.dataset.planet);
+
+    let planet = currentUniverse[systemIndex].planets[planetIndex];
+
+    document.getElementById("planet-name").textContent = planet.name;
+    document.getElementById("planet-description").textContent = planet.description;
+
+    document.getElementById("planet-stats").innerHTML = `
+        <p><strong>Type:</strong> ${planet.type}</p>
+        <p><strong>Temperature:</strong> ${planet.temperature} K</p>
+        <p><strong>Gravity:</strong> ${planet.gravity} Earth g</p>
+        <p><strong>Atmosphere:</strong> ${planet.atmosphere}</p>
+        <p><strong>Moons:</strong> ${planet.moons}</p>
+        <p><strong>Water:</strong> ${planet.water}</p>
+        <p><strong>Life:</strong> ${planet.life}</p>
+    `;
+
+    document.getElementById("planet-modal").classList.remove("hidden");
+});
+
+
+// close popup
+
+document.getElementById("close-modal").addEventListener("click", function() {
+    document.getElementById("planet-modal").classList.add("hidden");
+});
+
+document.getElementById("planet-modal").addEventListener("click", function(event) {
+    if (event.target.id === "planet-modal") {
+        this.classList.add("hidden");
     }
 });
 
-// escape key closes it too
-document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-        closeModal();
-    }
-});
+
+// generate a new universe when the button is clicked
+
+document.getElementById("generate-universe").addEventListener("click", generateUniverse);
+
+
+// create the first universe when the page opens
+
+generateUniverse();
