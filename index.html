@@ -18,7 +18,6 @@
             <a href="#about">About</a>
         </div>
     </nav>
-
     <!-- homescreen -->
     <header id="home" class="hero">
         <p class="subtitle">EXPLORE THE UNIVERSE</p>
@@ -38,31 +37,16 @@
             <p>Select a planet</p>
         </div>
 
-        <div class="planet-container">
-            <button class="planet-card" data-planet="aurelia">
-                <div class="planet-orb aurelia"></div>
-                <h3>Aurelia</h3>
-                <p>The golden world</p>
+        
+        <div class="generator-controls">
+            <button id="generate-universe" class="generate-button">
+                Generate New Universe
             </button>
-
-            <button class="planet-card" data-planet="nyx">
-                <div class="planet-orb nyx"></div>
-                <h3>Nyx</h3>
-                <p>Planet of eternal night</p>
-            </button>
-
-            <button class="planet-card" data-planet="zephyria">
-                <div class="planet-orb zephyria"></div>
-                <h3>Zephyria</h3>
-                <p>The storm giant</p>
-            </button>
-
-            <button class="planet-card" data-planet="cryon">
-                <div class="planet-orb cryon"></div>
-                <h3>Cryon</h3>
-                <p>The frozen frontier</p>
-            </button>
+            <p>Every universe is different. Discover yours.</p>
         </div>
+
+        <div id="systems-container" class="systems-container"></div>
+
     </main>
 
     <!-- popup -->
