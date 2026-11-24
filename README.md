@@ -3,7 +3,7 @@ A website where you can generate random solar systems and their planets, which g
 
 I built this as a project for Phantom by Hack Club and to strengthen my knowledge of programming languages, which I am currently learning.
 
-##Features
+## Features
 - It randomly generates a universe with multiple solar systems
 - Each universe has 4 to 5 solar systems inside of it
 - Procedural generation of stars for each solar system
@@ -12,16 +12,16 @@ I built this as a project for Phantom by Hack Club and to strengthen my knowledg
 - Interactive planet information pop-up display
 
 
-##How to Run
+## How to Run
 
 1. Run the command:
-git clone https://github.com/Sonical015/Cosmic-Explorer
+``git clone https://github.com/Sonical015/Cosmic-Explorer``
 
-2. Then open the project folder and launch index.html in a browser.
+2. Then open the project folder and launch ``index.html`` in a browser.
 
 No external libraries are currently required
 
-##Programming Languages and Technologies Used
+## Programming Languages and Technologies Used
 - HTML for website structure
 - CSS for visual design and layout
 - JavaScript for the website functionality (random generations and interactions)
@@ -29,7 +29,7 @@ No external libraries are currently required
 - DOM Manipulation to display generated systems
 - Event listeners for handling user clicks
 
-##What I Have Learnt
+## What I Have Learnt
 - How HTML, CSS and JavaScript work together.
 - How random generation works.
 - How to use arrays and objects.
@@ -37,7 +37,7 @@ No external libraries are currently required
 - How to manipulate webpage elements using JavaScript.
 - How to build an interactive project from scratch.
 
-##Future Plans
+## Future Plans
 Some possible upgrades that I am planning on implementing later on:
 - Realistic orbital animations.
 - More star classifications.
